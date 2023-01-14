@@ -25,7 +25,7 @@ module.exports = {
             },
             {
                 name: '• Misc',
-                value: inlineCode('avatar, freeban, poll, say, ticket')
+                value: inlineCode('avatar, freeban, poll, say')
             },
             {
                 name: '• Games',
@@ -33,7 +33,7 @@ module.exports = {
             },
             {
                 name: '• Util',
-                value: inlineCode('customrole, debug, ping')
+                value: inlineCode('customrole, debug, ping, runfunction')
             }
         )
 
