@@ -58,7 +58,11 @@ module.exports = {
             },
             {
                 name: 'Duration',
-                value: `<t:${parseInt(TargetMember.communicationDisabledUntilTimestamp / 1000)}:R>`
+                value: `${MuteDuration}`
+            },
+            {
+                name: 'Appeal',
+                value: '> https://dyno.gg/form/b72ba489'
             }
         )
         .setFooter({ text: `Punishment ID: ${CaseId}` })

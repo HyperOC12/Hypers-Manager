@@ -45,7 +45,7 @@ module.exports = {
             },
             {
                 name: 'Appeal',
-                value: '> https://forms.gle/2oweFFCMoDnY1Y8DA'
+                value: '> https://dyno.gg/form/b72ba489'
             }
         )
         .setFooter({ text: `Punishment ID: ${CaseId}` })
