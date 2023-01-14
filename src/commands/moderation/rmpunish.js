@@ -21,7 +21,7 @@ module.exports = {
 
         const PunishmentID = options.getString('id');
 
-        const data = database.findOne({ GuildID: guildId, CaseID: PunishmentID });
+        const data = await database.findOne({ GuildID: guildId, CaseID: PunishmentID });
 
         const NoCaseEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | No case found with ID \`${PunishmentID}\``)
         if (!data) return interaction.reply({ embeds: [NoCaseEmbed] });

@@ -43,5 +43,7 @@ module.exports = {
     
             TicketLogsChannel.send({ embeds: [LogEmbed] });
         });
+
+        interaction.reply({ content: 'Ticket opened.', ephemeral: true });
     },
 };
