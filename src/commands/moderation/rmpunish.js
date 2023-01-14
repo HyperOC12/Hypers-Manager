@@ -1,12 +1,14 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-const { Error_Emoji } = require('../../config.json');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
+
+const database = require('../../database/schemas/PunishmentSchema.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('rmpunish')
     .setDescription('Remove a punishment.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-    .addUserOption(option => option
+    .addNumberOption(option => option
             .setName('id')
             .setDescription('Punishment ID.')
             .setRequired(true)
@@ -15,17 +17,17 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     async execute(interaction, client) {
-        const { guild, options } = interaction;
+        const { guildId, options } = interaction;
 
-        const TargetUser = options.getUser('target') || user;
-        const TargetMember = await guild.members.fetch(TargetUser.id);
+        const PunishmentID = options.getString('id');
 
-        const CannotModerateEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | Unable to moderate this user.`)
-        if (!TargetMember.moderatable) return interaction.reply({ embeds: [CannotModerateEmbed] });
+        const data = database.findOne({ GuildID: guildId, CaseID: PunishmentID });
 
-        const ModeratedNickname_ID = randomstring.generate({ length: 5, charset: 'alphanumeric' });
-        await TargetMember.setNickname(`Moderated Nickname - ${ModeratedNickname_ID}`);
+        const NoCaseEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | No case found with ID \`${PunishmentID}\``)
+        if (!data) return interaction.reply({ embeds: [NoCaseEmbed] });
+        data.remove();
 
-        interaction.reply({ content: 'Nickname has been moderated.' });
+        const SuccessEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | Case with ID \`${PunishmentID}\` has been removed.`)
+        interaction.reply({ embeds: [SuccessEmbed] });
     },
 };
