@@ -8,7 +8,7 @@ module.exports = {
     .setName('rmpunish')
     .setDescription('Remove a punishment.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
-    .addNumberOption(option => option
+    .addStringOption(option => option
             .setName('id')
             .setDescription('Punishment ID.')
             .setRequired(true)
