@@ -1,5 +1,5 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-const { Success_Emoji, Error_Emoji } = require('../../config.json');
+const { DirectMessage_Embed_Colour, Success_Emoji, Error_Emoji } = require('../../config.json');
 const database = require('../../database/schemas/PunishmentSchema.js');
 const randomstring = require('randomstring');
 
@@ -81,7 +81,7 @@ module.exports = {
         const WarnSuccessEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetUser.id}> has been warned | \`${CaseId}\``)
         interaction.reply({ embeds: [WarnSuccessEmbed] });
 
-        const LogEmbed = new MessageEmbed()
+        const LogEmbed = new EmbedBuilder()
         .setColor('Orange')
         .setAuthor({ name: `${user.tag}`, iconURL: `${user.displayAvatarURL()}` })
         .setDescription(`**Member**: <@${TargetUser.id}> | \`${TargetUser.id}\`\n**Type**: Warn\n**Reason**: ${WarnReason}`)

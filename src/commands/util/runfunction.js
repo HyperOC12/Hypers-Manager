@@ -14,7 +14,11 @@ module.exports = {
     .setName('runfunction')
     .setDescription('Run a function.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    .addStringOption((option) => option.setName('name').setDescription('Function name.').setRequired(true)),
+    .addStringOption(option => option
+            .setName('name')
+            .setDescription('Function name.')
+            .setRequired(true)
+    ),
     /**
      * @param {ChatInputCommandInteraction} interaction
      */

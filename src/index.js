@@ -29,5 +29,5 @@ for (const folder of systemFolders) {
 client.handleCommands();
 client.handleEvents();
 client.login(process.env.BOT_TOKEN).then(() => {
-    //connect(process.env.MONGO_URI).then(() => console.log("[Database Status]: Connected"));
+    connect(process.env.MONGO_URI).then(() => console.log("[Database Status]: Connected"));
 });
