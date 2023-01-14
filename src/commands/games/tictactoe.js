@@ -16,8 +16,7 @@ module.exports = {
     async execute(interaction, client) {
         const { options, user } = interaction;
 
-        const Target = options.getUser('user')
-
+        const Target = options.getUser('user');
         if (Target.bot) return await interaction.reply({ content: 'Cannot play against bots.', ephemeral: true });
 
         const game = new Game(Target, user, interaction);
