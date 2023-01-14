@@ -52,7 +52,7 @@ module.exports = {
 
                 TicketPanelChannel.send({ embeds: [TicketPanelEmbed], components: [Buttons] });
 
-                const collector = TicketPanelChannel.createMessageComponentCollector({ componentType: ComponentType.Button, time: 15000 });
+                const collector = TicketPanelChannel.createMessageComponentCollector({ componentType: ComponentType.Button });
 
                 collector.on('collect', async (i) => {
                     if (i.customId === 'create-ticket') {
