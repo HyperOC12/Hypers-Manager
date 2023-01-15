@@ -3,7 +3,7 @@ const { ChatInputCommandInteraction, SlashCommandBuilder, PermissionFlagsBits, c
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('slowmode')
-    .setDescription('Sets a channe\'s slowmode.')
+    .setDescription('Sets a channel\'s slowmode.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
     .addStringOption(option => option
             .setName('duration')
