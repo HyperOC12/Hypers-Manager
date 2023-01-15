@@ -1,4 +1,4 @@
-const { CommandInteraction, Client } = require('discord.js');
+const { CommandInteraction, Client, InteractionType } = require('discord.js');
 
 module.exports = {
     name: 'interactionCreate',
@@ -7,9 +7,10 @@ module.exports = {
      * @param {Client} client
      */
     async execute(interaction, client) {
-        if (interaction.isCommand()) {
+        if (interaction.type == InteractionType.ApplicationCommand) {
+
             const cmd = client.commands.get(interaction.commandName);
-            if (!cmd) return interaction.reply({ content: 'Requested command not found.', ephemeral: true });
+            if (!cmd) return;
 
             try {
                 await cmd.execute(interaction, client);

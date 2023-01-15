@@ -33,7 +33,7 @@ module.exports = {
             },
             {
                 name: '• Util',
-                value: inlineCode('customrole, debug, ping')
+                value: inlineCode('automod, customrole, debug, ping')
             }
         )
 
