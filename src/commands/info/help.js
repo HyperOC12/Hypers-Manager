@@ -25,7 +25,7 @@ module.exports = {
             },
             {
                 name: '• Misc',
-                value: inlineCode('avatar, freeban, poll, say')
+                value: inlineCode('avatar, diner, freeban, poll, say')
             },
             {
                 name: '• Games',
