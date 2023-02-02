@@ -38,13 +38,13 @@ module.exports = {
         const LogChannel = guild.channels.cache.get('946156432057860103');
         const CaseId = randomstring.generate({ length: 18, charset: 'numeric' });
 
-        const CannotMuteEmbed = new EmbedBuilder().setColor("Red").setDescription(`${Error_Emoji} | Unable to mute this user.`)
+        const CannotMuteEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | Unable to mute this user.`)
         if (!TargetMember.moderatable) return interaction.reply({ embeds: [CannotMuteEmbed] });
 
-        const AlreadyMutedEmbed = new EmbedBuilder().setColor("Red").setDescription(`${Error_Emoji} | This user is already muted.`)
+        const AlreadyMutedEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | This user is already muted.`)
         if (TargetMember.isCommunicationDisabled === true) return interaction.reply({ embeds: [AlreadyMutedEmbed] });
 
-        const NotValidEmbed = new EmbedBuilder().setColor("Red").setDescription(`${Error_Emoji} | Input provided is invalid (Duration / Limit Hit).`)
+        const NotValidEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | Input provided is invalid (Duration / Limit Hit).`)
         if (!ms(MuteDuration) || ms(MuteDuration) > ms('28d')) return interaction.reply({ embeds: [NotValidEmbed] });
 
         const DirectEmbed = new EmbedBuilder()
@@ -58,7 +58,7 @@ module.exports = {
             },
             {
                 name: 'Duration',
-                value: `${MuteDuration}`
+                value: `> ${MuteDuration}`
             },
             {
                 name: 'Appeal',
