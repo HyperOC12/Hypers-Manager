@@ -24,7 +24,7 @@ module.exports = {
     async execute(interaction, client) {
         const { guild, options, user } = interaction;
 
-        const TargetUser = options.getUser('target') || user;
+        const TargetUser = options.getUser('target');
         const TargetMember = await guild.members.fetch(TargetUser.id);
         const UnmuteReason = options.getString('reason') || 'No reason provided.';
 
@@ -35,7 +35,7 @@ module.exports = {
         if (!TargetMember.moderatable) return interaction.reply({ embeds: [CannotUnmuteEmbed] });
 
         const NotMutedEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | This user is not muted.`)
-        if (TargetMember.isCommunicationDisabled === false) return interaction.reply({ embeds: [NotMutedEmbed] });
+        if (TargetMember.isCommunicationDisabled() === false) return interaction.reply({ embeds: [NotMutedEmbed] });
 
         await TargetMember.timeout(null).then(() => {
             const UnmuteSuccessEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetUser.id}> has been unmuted | \`${CaseId}\``)
