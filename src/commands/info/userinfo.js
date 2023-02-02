@@ -16,15 +16,15 @@ module.exports = {
     async execute(interaction, client) {
         const { guild, options, user } = interaction;
 
-        const TargetUser = options.getUser('target') || user
-        const TargetMember = await guild.members.fetch(TargetUser.id)
+        const TargetUser = options.getUser('target') || user;
+        const TargetMember = await guild.members.fetch(TargetUser.id);
 
-        const UserBanner = (await client.users.fetch(TargetUser, { force: true })).bannerURL({ size: 2048 })
+        const UserBanner = (await client.users.fetch(TargetUser, { force: true })).bannerURL({ size: 2048 });
         const UserRoles = TargetMember.roles.cache.sort((a, b) => b.position - a.position).map((r) => r).join(' ').replace('@everyone, " "');
         const RoleSize = TargetMember.roles.cache.size;
 
         const InfoEmbed = new EmbedBuilder()
-        .setColor(Default_Embed_Colour)
+        .setColor(UserColour)
         .setAuthor({ name: `${guild.name}`, iconURL: `${guild.iconURL()}` })
         .setThumbnail(`${TargetUser.displayAvatarURL()}`)
         .setImage(UserBanner)
