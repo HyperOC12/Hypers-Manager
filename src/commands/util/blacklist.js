@@ -39,7 +39,7 @@ module.exports = {
         });
         blacklist.save();
 
-        const BlacklistedEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetUser.id}> has been blacklisted | \`${BlacklistReason}\`.`)
+        const BlacklistedEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetUser.id}> has been blacklisted | \`${BlacklistReason}\``)
         interaction.reply({ embeds: [BlacklistedEmbed] });
     },
 };
