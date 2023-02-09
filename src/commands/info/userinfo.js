@@ -24,7 +24,7 @@ module.exports = {
         const RoleSize = TargetMember.roles.cache.size;
 
         const InfoEmbed = new EmbedBuilder()
-        .setColor(UserColour)
+        .setColor(Default_Embed_Colour)
         .setAuthor({ name: `${guild.name}`, iconURL: `${guild.iconURL()}` })
         .setThumbnail(`${TargetUser.displayAvatarURL()}`)
         .setImage(UserBanner)
