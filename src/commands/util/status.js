@@ -1,9 +1,10 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, Client, inlineCode } = require('discord.js');
+const { ChatInputCommandInteraction, SlashCommandBuilder, Client, PermissionFlagsBits, inlineCode } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('status')
     .setDescription('Change the bot\'s status.')
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addStringOption(option => option
         .setName('text')
         .setDescription('Status text.')
