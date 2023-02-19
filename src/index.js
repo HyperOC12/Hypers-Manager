@@ -17,7 +17,7 @@ const client = new Client({
 });
 
 client.commands = new Collection();
-client.joinToCreate =  new Collection();
+client.joinToCreate = new Collection();
 
 const handlerFiles = readdirSync('./src/handlers/').filter(file => file.endsWith('.js'));
 for (const file of handlerFiles) require(`./handlers/${file}`)(client);
