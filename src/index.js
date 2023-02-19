@@ -11,11 +11,13 @@ const client = new Client({
         GatewayIntentBits.GuildBans,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.GuildVoiceStates
     ],
     allowedMentions: { parse: ['users', 'roles'] },
 });
 
 client.commands = new Collection();
+client.joinToCreate=  new Collection();
 
 const handlerFiles = readdirSync('./src/handlers/').filter(file => file.endsWith('.js'));
 for (const file of handlerFiles) require(`./handlers/${file}`)(client);
