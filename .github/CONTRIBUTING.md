@@ -6,8 +6,9 @@ First off, thanks for taking some time into contributing for Jay's Assistant! Th
 
 1. Fork & clone this repository, make sure it is on the **main** branch.
 2. Install dependencies ` npm i `.
+3. Make a ` .env ` file. An example env file has been provided in the repository.
 3. Make some new additions.
-4. Test the bot ` node . `
+4. Test the bot ` npm start `
 5. If all goes well create a PR.
 
 ## Rewards
