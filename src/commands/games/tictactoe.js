@@ -9,7 +9,7 @@ module.exports = {
             .setName('user')
             .setDescription('The user to play with.')
             .setRequired(true)
-        ),
+    ),
     /**
      * @param {ChatInputCommandInteraction} interaction
      */
