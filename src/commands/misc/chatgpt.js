@@ -27,14 +27,14 @@ module.exports = {
             const openai = new OpenAIApi(configuration);
 
             const completion = await openai.createCompletion({
-                model: "text-davinci-002",
+                model: 'text-davinci-002',
                 prompt: question,
                 max_tokens: 1000
             })
 
             await interaction.editReply(completion.data.choices[0].text);
         } catch (error) {
-            await interaction.editReply("Oops! Something went wrong...")
+            await interaction.editReply('Oops! Something went wrong...')
         }
     },
 };
