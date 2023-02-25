@@ -71,7 +71,7 @@ module.exports = {
         });
 
         interaction.reply({ 
-            content: `${Success_Emoji} Warned **${TargetUser.tag}** (Case #${CaseId}) (${DM_Status})`
+            content: `${Success_Emoji} Warned **${TargetUser.tag}** (Case #${CaseId})`
          });
 
         const LogEmbed = new EmbedBuilder()
