@@ -9,6 +9,7 @@ module.exports = {
     .addStringOption(option => option
             .setName('duration')
             .setDescription('Slowmode duration.')
+            .setRequired(true)
     ),
     /**
      * @param {ChatInputCommandInteraction} interaction
@@ -46,12 +47,6 @@ module.exports = {
             await interaction.reply(`${Success_Emoji} Slowmode set to **${SlowmodeDuration}**`);
         } else {
             await interaction.reply(`${Error_Emoji} Unable to set slowmode.`);
-        }
-
-        if (!SlowmodeDuration) {
-            interaction.reply({
-                content: `Current slowmode for ${channelMention(channel.id)} is ${channel.rateLimitPerUser}`
-            })
         }
     },
 };
