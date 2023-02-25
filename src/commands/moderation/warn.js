@@ -37,17 +37,11 @@ module.exports = {
         if (TargetUser.id === user.id) return interaction.reply({ 
             content: `${Error_Emoji} Cannot warn yourself.`
         });
-
-        try {
-            await TargetUser.send({ 
-                content: `You have been warned in **${guild.name}** for the reason ${KickReason}`
-            });
-
-            DM_Status = '(user notified)'
-         } catch (error) {
-            DM_Status = '(unable to message user)'
-         };
-
+        
+        await TargetUser.send({ 
+            content: `You have been warned in **${guild.name}** for the reason ${WarnReason}`
+        }).catch(console.error);
+        
         database.findOne({ Type: 'Warn', CaseID: CaseId, GuildID: guildId, UserID: TargetUser.id, UserTag: TargetUser.tag }, async (err, res) => {
             if (err) throw err;
             if (!res) {
