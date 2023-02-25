@@ -31,9 +31,15 @@ module.exports = {
 
         const LogChannel = guild.channels.cache.get('946156432057860103');
         const CaseId = createCaseId();
-
-        if (!TargetMember.moderatable || TargetMember.isCommunicationDisabled === false) {
-            interaction.reply({
+        
+        if (!TargetMember.moderatable) {
+            return interaction.reply({
+                content: `${Error_Emoji} Unable to perform action.`
+            });
+        };
+        
+        if (!TargetMember.isCommunicationDisabled() == true) {
+            return interaction.reply({
                 content: `${Error_Emoji} Unable to perform action.`
             });
         };
