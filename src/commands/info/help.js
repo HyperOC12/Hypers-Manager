@@ -16,7 +16,7 @@ module.exports = {
         .setColor(Default_Embed_Colour)
         .setTitle('Help')
         .setDescription(`${client.user.username} is a private moderation and utility bot for ${guild.name}, currently managed and maintaned by the lovely development team!`)
-        .setImage(client.user.avatarURL())
+        .setThumbnail(client.user.avatarURL())
         .setFields(
             {
                 name: '• Info',
