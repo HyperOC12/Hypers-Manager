@@ -9,7 +9,6 @@ module.exports = {
     .addStringOption(option => option
             .setName('duration')
             .setDescription('Slowmode duration.')
-            .setRequired(true)
     ),
     /**
      * @param {ChatInputCommandInteraction} interaction
