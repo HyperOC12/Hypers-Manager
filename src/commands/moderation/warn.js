@@ -32,8 +32,6 @@ module.exports = {
         const LogChannel = guild.channels.cache.get('946156432057860103');
         const CaseId = createCaseId();
 
-        let DM_Status
-
         if (TargetUser.id === user.id) return interaction.reply({ 
             content: `${Error_Emoji} Cannot warn yourself.`
         });
