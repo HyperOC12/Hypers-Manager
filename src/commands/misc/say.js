@@ -20,14 +20,12 @@ module.exports = {
         const { guild, channel, options } = interaction;
 
         const Message = options.getString('message');
-        const LogChannel = guild.channels.cache.get('946156222292299807');
 
         channel.send({ content: `${Message}`, allowedMentions: { parse: ['users'] } }).then(() => {
             interaction.reply({
-                content: `${Success_Emoji} Message sent to ${channelMention(channel.id)}`
+                content: `${Success_Emoji} Message sent to ${channelMention(channel.id)}`,
+                ephemeral: true
             });
         });
-
-        LogChannel.send({ embeds: [LogEmbed] });
     },
 };
