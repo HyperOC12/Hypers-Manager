@@ -12,16 +12,6 @@ module.exports = {
             .setRequired(true)
             .setMaxLength(32)
             .setMinLength(1)
-    )
-    .addStringOption(option => option
-            .setName('type')
-            .setDescription('Activity type.')
-            .setRequired(true)
-            .addChoices(
-                { name: 'Watching', value: 'watching' },
-                { name: 'Listening', value: 'listening' },
-                { name: 'Playing', value: 'playing' }
-            )
     ),
     /**
      * @param {ChatInputCommandInteraction} interaction
@@ -31,27 +21,8 @@ module.exports = {
         const { options } = interaction;
         
         const StatusText = options.getString('text');
-        const StatusType = options.getString('type');
-
-        let ChosenType = '';
-
-        switch (StatusType) {
-            case 'watching':
-                ChosenType = 'Watching'
-                break;
-            case 'listening':
-                ChosenType = 'Listening'
-                break;
-            case 'playing':
-                ChosenType = 'Playing'
-                break;
+        client.user.setActivity({ name: `${StatusText}` });
         
-            default:
-                ChosenType = 'Playing';
-        };
-
-        client.user.setActivity({ name: `${StatusText}`, type: `${ChosenType}` });
-
         interaction.reply({ 
             content: `${Success_Emoji} Status changed to **${StatusText}** with type **${ChosenType}**`
         });
