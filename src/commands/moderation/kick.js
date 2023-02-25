@@ -31,25 +31,17 @@ module.exports = {
         const LogChannel = guild.channels.cache.get('946156432057860103');
         const CaseId = createCaseId();
 
-        let DM_Status = '';
-
         if (!TargetMember.kickable) return interaction.reply({ 
             content: `${Error_Emoji} Unable to kick this user.`
-         });
-
-         try {
-            await TargetUser.send({ 
-                content: `You have been kicked from **${guild.name}** for the reason ${KickReason}`
-            });
-
-            DM_Status = '(user notified)'
-         } catch (error) {
-            DM_Status = '(unable to message user)'
-         };
+        });
+        
+       	await TargetUser.send({ 
+            content: `You have been kicked from **${guild.name}** for the reason ${BanReason}`
+        }).catch(console.error);
 
         await TargetMember.kick(KickReason).then(() => {
             interaction.reply({ 
-                content: `${Success_Emoji} Kicked **${TargetUser.tag}** (Case #${CaseId}) (${DM_Status})`
+                content: `${Success_Emoji} Kicked **${TargetUser.tag}** (Case #${CaseId})`
              });
         });
 
