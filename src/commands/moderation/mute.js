@@ -39,19 +39,25 @@ module.exports = {
         const CaseId = createCaseId();
         const MuteExpiry = time(TargetMember.communicationDisabledUntilTimestamp);
         
-        if (!TargetMember.moderatable || TargetMember.isCommunicationDisabled === true) {
-            interaction.reply({
+        if (!TargetMember.moderatable) {
+            return interaction.reply({
+                content: `${Error_Emoji} Unable to perform action.`
+            });
+        };
+        
+        if (!TargetMember.isCommunicationDisabled() == false) {
+            return interaction.reply({
                 content: `${Error_Emoji} Unable to perform action.`
             });
         };
         
         await TargetUser.send({ 
             content: `You have been muted in **${guild.name}** for the reason: ${MuteReason} (${MuteDuration}). If you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
-        }).catch(console.error);
+        }).catch(console.error)
 
         await TargetMember.timeout(ms(MuteDuration)).then(() => {
             interaction.reply({ 
-                content: `${Success_Emoji} Muted **${TargetUser.tag}** for **${MuteDuration}** (Case #${CaseId}) (${DM_Status})`
+                content: `${Success_Emoji} Muted **${TargetUser.tag}** for **${MuteDuration}** (Case #${CaseId})`
              });
         });
 
