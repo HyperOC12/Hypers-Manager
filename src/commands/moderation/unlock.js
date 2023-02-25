@@ -28,7 +28,7 @@ module.exports = {
 
         const UnlockedEmbed = new EmbedBuilder()
         .setColor('Green')
-        .setTitle('Channel Unocked')
+        .setTitle('Channel Unlocked')
         .setDescription('This channel has been unlocked.')
         .setFields({ name: 'Reason', value: `${UnlockReason}` })
         .setTimestamp()
