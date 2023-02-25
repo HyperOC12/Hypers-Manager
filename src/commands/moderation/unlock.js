@@ -3,7 +3,7 @@ const { Success_Emoji, Error_Emoji } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
-    .setName('Unlock')
+    .setName('unlock')
     .setDescription('Unlock a channel.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
     .addChannelOption(option => option
