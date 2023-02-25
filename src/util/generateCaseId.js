@@ -1,6 +1,10 @@
 const randomstring = require('randomstring');
 
-export function createCaseId() {
+function createCaseId() {
     const id = randomstring.generate({ length: 18, charset: 'numeric' });
     return id;
+};
+
+module.exports = {
+    createCaseId
 };
