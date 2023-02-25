@@ -12,7 +12,7 @@ module.exports = {
         const { guild } = interaction;
 
         interaction.reply({
-            content: `Current members: **${guild.memberCount}}**`
+            content: `Current members: **${guild.memberCount}**`
         });
     },
 };
