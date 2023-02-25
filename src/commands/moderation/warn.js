@@ -39,7 +39,7 @@ module.exports = {
         });
         
         await TargetUser.send({ 
-            content: `You have been warned in **${guild.name}** for the reason ${WarnReason}`
+            content: `You have been warned in **${guild.name}** for the reason: ${WarnReason}`
         }).catch(console.error);
         
         database.findOne({ Type: 'Warn', CaseID: CaseId, GuildID: guildId, UserID: TargetUser.id, UserTag: TargetUser.tag }, async (err, res) => {
