@@ -9,19 +9,25 @@ module.exports = {
      */
     async execute(interaction, client) {
         if (interaction.type == InteractionType.ApplicationCommand) {
-
             const { guildId, user } = interaction;
 
-            const blacklist = await blacklistDB.findOne({ GuildID: guildId, UserID: user.id });
-            if (blacklist) return interaction.reply({ content: `You have been blacklisted.\n> ${blacklist.Reason}`, ephemeral: true });
+            const blacklisted = await blacklistDB.findOne({ GuildID: guildId, UserID: user.id });
 
-            const cmd = client.commands.get(interaction.commandName);
-            if (!cmd) return;
+            if (blacklisted) return interaction.reply({ 
+                content: `You have been blacklisted from using any commands.\n> ${blacklisted.Reason}`, 
+                ephemeral: true 
+            });
+
+            const command = client.commands.get(interaction.commandName);
+            if (!command) return;
 
             try {
-                await cmd.execute(interaction, client);
+                await command.execute(interaction, client);
             } catch (error) {
-                interaction.reply({ content: 'An error occured whilst trying to run this command.', ephemeral: true });
+                interaction.reply({ 
+                    content: 'An error occured whilst trying to run this command.', 
+                    ephemeral: true 
+                });
                 console.log(error);
             };
         };
