@@ -38,24 +38,16 @@ module.exports = {
         const LogChannel = guild.channels.cache.get('946156432057860103');
         const CaseId = createCaseId();
         const MuteExpiry = time(TargetMember.communicationDisabledUntilTimestamp);
-
-        let DM_Status = '';
         
         if (!TargetMember.moderatable || TargetMember.isCommunicationDisabled === true) {
             interaction.reply({
                 content: `${Error_Emoji} Unable to perform action.`
             });
         };
-
-        try {
-            await TargetUser.send({ 
-                content: `You have been muted in **${guild.name}** for the reason ${MuteReason} (${MuteDuration}). If you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
-            });
-
-            DM_Status = '(user notified)'
-         } catch (error) {
-            DM_Status = '(unable to message user)'
-         };
+        
+        await TargetUser.send({ 
+            content: `You have been muted in **${guild.name}** for the reason ${MuteReason} (${MuteDuration}). If you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
+        });
 
         await TargetMember.timeout(ms(MuteDuration)).then(() => {
             interaction.reply({ 
