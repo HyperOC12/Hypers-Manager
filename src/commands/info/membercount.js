@@ -13,6 +13,6 @@ module.exports = {
 
         interaction.reply({
             content: `Current members: **${guild.memberCount}}**`
-        })
+        });
     },
 };
