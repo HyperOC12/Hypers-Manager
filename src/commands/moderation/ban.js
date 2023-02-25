@@ -31,8 +31,6 @@ module.exports = {
         const LogChannel = guild.channels.cache.get('946156432057860103');
         const CaseId = createCaseId();
 
-        let DM_Status = '';
-
         if (!TargetMember.bannable) return interaction.reply({ 
             content: `${Error_Emoji} Unable to perform action.`
         });
