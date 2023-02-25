@@ -35,21 +35,15 @@ module.exports = {
 
         if (!TargetMember.bannable) return interaction.reply({ 
             content: `${Error_Emoji} Unable to perform action.`
-         });
+        });
 
-         try {
-            await TargetUser.send({ 
-                content: `You have been banned from **${guild.name}** for the reason ${BanReason}\nIf you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
-            });
-
-            DM_Status = '(user notified)'
-         } catch (error) {
-            DM_Status = '(unable to message user)'
-         };
-
+       	await TargetUser.send({ 
+            content: `You have been banned from **${guild.name}** for the reason ${BanReason}\nIf you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
+        }).catch(console.error);
+        
         await TargetMember.ban({ deleteMessageSeconds: 86400, reason: BanReason }).then(() => {
             interaction.reply({ 
-                content: `${Success_Emoji} Banned **${TargetUser.tag}** (Case #${CaseId}) (${DM_Status})`
+                content: `${Success_Emoji} Banned **${TargetUser.tag}** (Case #${CaseId})`
              });
         });
 
