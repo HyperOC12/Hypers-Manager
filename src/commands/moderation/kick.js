@@ -36,7 +36,7 @@ module.exports = {
         });
         
        	await TargetUser.send({ 
-            content: `You have been kicked from **${guild.name}** for the reason ${BanReason}`
+            content: `You have been kicked from **${guild.name}** for the reason ${KickReason}`
         }).catch(console.error);
 
         await TargetMember.kick(KickReason).then(() => {
