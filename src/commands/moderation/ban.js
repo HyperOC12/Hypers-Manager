@@ -36,7 +36,7 @@ module.exports = {
         });
 
        	await TargetUser.send({ 
-            content: `You have been banned from **${guild.name}** for the reason ${BanReason}\nIf you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
+            content: `You have been banned from **${guild.name}** for the reason: ${BanReason}\nIf you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
         }).catch(console.error);
         
         await TargetMember.ban({ deleteMessageSeconds: 86400, reason: BanReason }).then(() => {
