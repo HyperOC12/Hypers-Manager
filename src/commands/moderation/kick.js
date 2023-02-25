@@ -1,6 +1,6 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-const { DirectMessage_Embed_Colour, Success_Emoji, Error_Emoji } = require('../../config.json');
-const randomstring = require('randomstring');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
+const { createCaseId } = require('../../util/generateCaseId');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,29 +29,28 @@ module.exports = {
         const KickReason = options.getString('reason') || 'No reason provided.';
 
         const LogChannel = guild.channels.cache.get('946156432057860103');
-        const CaseId = randomstring.generate({ length: 18, charset: 'numeric' });
+        const CaseId = createCaseId();
 
-        const CannotKickEmbed = new EmbedBuilder().setColor("Red").setDescription(`${Error_Emoji} | Unable to kick this user.`)
-        if (!TargetMember.kickable) return interaction.reply({ embeds: [CannotKickEmbed] });
+        let DM_Status = '';
 
-        const DirectEmbed = new EmbedBuilder()
-        .setColor(DirectMessage_Embed_Colour)
-        .setAuthor({ name: `${guild.name}`, iconURL: `${guild.iconURL()}` })
-        .setTitle(`You have been kicked from ${guild.name}`)
-        .setFields(
-            {
-                name: 'Reason',
-                value: `> ${KickReason}`
-            }
-        )
-        .setFooter({ text: `Punishment ID: ${CaseId}` })
-        .setTimestamp()
+        if (!TargetMember.kickable) return interaction.reply({ 
+            content: `${Error_Emoji} Unable to kick this user.`
+         });
 
-        await TargetUser.send({ embeds: [DirectEmbed] }).catch((console.error));
+         try {
+            await TargetUser.send({ 
+                content: `You have been kicked from **${guild.name}** for the reason ${KickReason}`
+            });
+
+            DM_Status = '(user notified)'
+         } catch (error) {
+            DM_Status = '(unable to message user)'
+         };
 
         await TargetMember.kick(KickReason).then(() => {
-            const KickSuccessEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetUser.id}> has been kicked | \`${CaseId}\``)
-            interaction.reply({ embeds: [KickSuccessEmbed] });
+            interaction.reply({ 
+                content: `${Success_Emoji} Kicked **${TargetUser.tag}** (Case #${CaseId}) (${DM_Status})`
+             });
         });
 
         const LogEmbed = new EmbedBuilder()

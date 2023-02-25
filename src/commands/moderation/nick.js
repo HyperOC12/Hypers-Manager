@@ -1,10 +1,10 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-const { Error_Emoji } = require('../../config.json');
+const { ChatInputCommandInteraction, SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('nick')
-    .setDescription('Change or reset a member\s nickname.')
+    .setDescription('Change or reset a member\'s nickname.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageNicknames)
     .addUserOption(option => option
             .setName('target')
@@ -27,19 +27,22 @@ module.exports = {
         const TargetMember = await guild.members.fetch(TargetUser.id);
         const Nickname = options.getString('nickname');
 
-        const CannotChangeEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | Unable to moderate this user.`)
-        if (!TargetMember.moderatable) return interaction.reply({ embeds: [CannotChangeEmbed] });
+        if (!TargetMember.moderatable) return interaction.reply({ 
+            content: `${Error_Emoji} Unable to perform action.`
+        });
 
         if (!Nickname) {
             if (!TargetMember.nickname) {
-                return interaction.reply({ content: 'User has no nickname set.' });
+                return interaction.reply({ content: `${Error_Emoji} User has no nickname set.` });
             } else {
                 await TargetMember.setNickname('');
-                return interaction.reply({ content: 'Nickname reset.' });
+                return interaction.reply({ content: `${Success_Emoji} Nickname has been reset.` });
             };
         } else {
             await TargetMember.setNickname(Nickname);
-            return interaction.reply({ content: `Nickname has been set to **${Nickname}**` });
+            return interaction.reply({ 
+                content: `${Success_Emoji} Nickname has been set to **${Nickname}**` 
+            });
         };
     },
 };

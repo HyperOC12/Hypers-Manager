@@ -1,4 +1,5 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, Client, PermissionFlagsBits, inlineCode } = require('discord.js');
+const { ChatInputCommandInteraction, SlashCommandBuilder, Client, PermissionFlagsBits } = require('discord.js');
+const { Success_Emoji } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -6,11 +7,21 @@ module.exports = {
     .setDescription('Change the bot\'s status.')
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .addStringOption(option => option
-        .setName('text')
-        .setDescription('Status text.')
-        .setRequired(true)
-        .setMaxLength(32)
-        .setMinLength(1)
+            .setName('text')
+            .setDescription('Status text.')
+            .setRequired(true)
+            .setMaxLength(32)
+            .setMinLength(1)
+    )
+    .addStringOption(option => option
+            .setName('type')
+            .setDescription('Activity type.')
+            .setRequired(true)
+            .addChoices(
+                { name: 'Watching', value: 'watching' },
+                { name: 'Listening', value: 'listening' },
+                { name: 'Playing', value: 'playing' }
+            )
     ),
     /**
      * @param {ChatInputCommandInteraction} interaction
@@ -20,8 +31,29 @@ module.exports = {
         const { options } = interaction;
         
         const StatusText = options.getString('text');
-        client.user.setActivity({ name: `${StatusText}` });
+        const StatusType = options.getString('type');
 
-        interaction.reply({ content: `Status changed to ${inlineCode(StatusText)}`, ephemeral: true })
+        let ChosenType = '';
+
+        switch (StatusType) {
+            case 'watching':
+                ChosenType = 'Watching'
+                break;
+            case 'listening':
+                ChosenType = 'Listening'
+                break;
+            case 'playing':
+                ChosenType = 'Playing'
+                break;
+        
+            default:
+                ChosenType = 'Playing';
+        };
+
+        client.user.setActivity({ name: `${StatusText}`, type: `${ChosenType}` });
+
+        interaction.reply({ 
+            content: `${Success_Emoji} Status changed to **${StatusText}** with type **${ChosenType}**`
+        });
     },
 };

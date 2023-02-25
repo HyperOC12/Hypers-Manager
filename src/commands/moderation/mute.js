@@ -1,6 +1,6 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-const { DirectMessage_Embed_Colour, Success_Emoji, Error_Emoji } = require('../../config.json');
-const randomstring = require('randomstring');
+const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, time } = require('discord.js');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
+const { createCaseId } = require('../../util/generateCaseId');
 const ms = require('ms');
 
 module.exports = {
@@ -36,49 +36,37 @@ module.exports = {
         const MuteReason = options.getString('reason') || 'No reason provided.';
 
         const LogChannel = guild.channels.cache.get('946156432057860103');
-        const CaseId = randomstring.generate({ length: 18, charset: 'numeric' });
+        const CaseId = createCaseId();
+        const MuteExpiry = time(TargetMember.communicationDisabledUntilTimestamp);
 
-        const CannotMuteEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | Unable to mute this user.`)
-        if (!TargetMember.moderatable) return interaction.reply({ embeds: [CannotMuteEmbed] });
+        let DM_Status = '';
+        
+        if (!TargetMember.moderatable || TargetMember.isCommunicationDisabled === true) {
+            interaction.reply({
+                content: `${Error_Emoji} Unable to perform action.`
+            });
+        };
 
-        const AlreadyMutedEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | This user is already muted.`)
-        if (TargetMember.isCommunicationDisabled === true) return interaction.reply({ embeds: [AlreadyMutedEmbed] });
+        try {
+            await TargetUser.send({ 
+                content: `You have been muted in **${guild.name}** for the reason ${MuteReason} (${MuteDuration}). If you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
+            });
 
-        const NotValidEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | Input provided is invalid (Duration / Limit Hit).`)
-        if (!ms(MuteDuration) || ms(MuteDuration) > ms('28d')) return interaction.reply({ embeds: [NotValidEmbed] });
-
-        const DirectEmbed = new EmbedBuilder()
-        .setColor(DirectMessage_Embed_Colour)
-        .setAuthor({ name: `${guild.name}`, iconURL: `${guild.iconURL()}` })
-        .setTitle(`You have been muted in ${guild.name}`)
-        .setFields(
-            {
-                name: 'Reason',
-                value: `> ${MuteReason}`
-            },
-            {
-                name: 'Duration',
-                value: `> ${MuteDuration}`
-            },
-            {
-                name: 'Appeal',
-                value: '> https://dyno.gg/form/b72ba489'
-            }
-        )
-        .setFooter({ text: `Punishment ID: ${CaseId}` })
-        .setTimestamp()
-
-        await TargetUser.send({ embeds: [DirectEmbed] }).catch((console.error));
+            DM_Status = '(user notified)'
+         } catch (error) {
+            DM_Status = '(unable to message user)'
+         };
 
         await TargetMember.timeout(ms(MuteDuration)).then(() => {
-            const MuteSuccessEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetUser.id}> has been muted | \`${CaseId}\``)
-            interaction.reply({ embeds: [MuteSuccessEmbed] });
+            interaction.reply({ 
+                content: `${Success_Emoji} Muted **${TargetUser.tag}** for **${MuteDuration}** (Case #${CaseId}) (${DM_Status})`
+             });
         });
 
         const LogEmbed = new EmbedBuilder()
         .setColor('Yellow')
         .setAuthor({ name: `${user.tag}`, iconURL: `${user.displayAvatarURL()}` })
-        .setDescription(`**Member**: <@${TargetUser.id}> | \`${TargetUser.id}\`\n**Type**: Mute\n**Expires**: <t:${parseInt(TargetMember.communicationDisabledUntilTimestamp / 1000)}:R>\n**Reason**: ${MuteReason}`)
+        .setDescription(`**Member**: <@${TargetUser.id}> | \`${TargetUser.id}\`\n**Type**: Mute\n**Expires**: ${MuteExpiry}\n**Reason**: ${MuteReason}`)
         .setFooter({ text: `Punishment ID: ${CaseId}` })
         .setTimestamp()
 

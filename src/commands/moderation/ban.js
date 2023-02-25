@@ -1,6 +1,6 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-const { DirectMessage_Embed_Colour, Success_Emoji, Error_Emoji } = require('../../config.json');
-const randomstring = require('randomstring');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
+const { createCaseId } = require('../../util/generateCaseId');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,33 +29,28 @@ module.exports = {
         const BanReason = options.getString('reason') || 'No reason provided.';
 
         const LogChannel = guild.channels.cache.get('946156432057860103');
-        const CaseId = randomstring.generate({ length: 18, charset: 'numeric' });
+        const CaseId = createCaseId();
 
-        const CannotBanEmbed = new EmbedBuilder().setColor("Red").setDescription(`${Error_Emoji} | Unable to ban this user.`)
-        if (!TargetMember.bannable) return interaction.reply({ embeds: [CannotBanEmbed] });
+        let DM_Status = '';
 
-        const DirectEmbed = new EmbedBuilder()
-        .setColor(DirectMessage_Embed_Colour)
-        .setAuthor({ name: `${guild.name}`, iconURL: `${guild.iconURL()}` })
-        .setTitle(`You have been banned from ${guild.name}`)
-        .setFields(
-            {
-                name: 'Reason',
-                value: `> ${BanReason}`
-            },
-            {
-                name: 'Appeal',
-                value: '> https://dyno.gg/form/b72ba489'
-            }
-        )
-        .setFooter({ text: `Punishment ID: ${CaseId}` })
-        .setTimestamp()
+        if (!TargetMember.bannable) return interaction.reply({ 
+            content: `${Error_Emoji} Unable to perform action.`
+         });
 
-        await TargetUser.send({ embeds: [DirectEmbed] }).catch((console.error));
+         try {
+            await TargetUser.send({ 
+                content: `You have been banned from **${guild.name}** for the reason ${BanReason}\nIf you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
+            });
+
+            DM_Status = '(user notified)'
+         } catch (error) {
+            DM_Status = '(unable to message user)'
+         };
 
         await TargetMember.ban({ deleteMessageSeconds: 86400, reason: BanReason }).then(() => {
-            const BanSuccessEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetUser.id}> has been banned | \`${CaseId}\``)
-            interaction.reply({ embeds: [BanSuccessEmbed] });
+            interaction.reply({ 
+                content: `${Success_Emoji} Banned **${TargetUser.tag}** (Case #${CaseId}) (${DM_Status})`
+             });
         });
 
         const LogEmbed = new EmbedBuilder()

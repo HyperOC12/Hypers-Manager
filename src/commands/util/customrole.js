@@ -1,4 +1,5 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -39,8 +40,15 @@ module.exports = {
 
         const Divider = await guild.roles.fetch('1052436531551412244');
 
-        if (!RoleColour.includes('#')) return interaction.reply({ content: 'Provide a valid hex colour.', ephemeral: true });
-        if (!TargetMember.manageable) return interaction.reply({ content: 'Unable to give role.', ephemeral: true });
+        if (!RoleColour.includes('#')) return interaction.reply({ 
+            content: `${Error_Emoji} Invalid hex colour.`,
+            ephemeral: true
+        });
+
+        if (!TargetMember.manageable) return interaction.reply({ 
+            content: `${Error_Emoji} Unable to perform action.`,
+            ephemeral: true
+        });
 
         const CustomRole = await guild.roles.create({
             name: RoleName,
@@ -51,6 +59,9 @@ module.exports = {
         });
 
         TargetMember.roles.add(CustomRole);
-        return interaction.reply({ content: `Role created and given to ${TargetUser.tag}`, ephemeral: true });
+
+        interaction.reply({ 
+            content: `${Success_Emoji} Role created and given to **${TargetUser.tag}**`
+        });
     },
 };

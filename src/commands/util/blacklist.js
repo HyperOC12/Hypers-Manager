@@ -28,8 +28,9 @@ module.exports = {
         const TargetMember = await guild.members.fetch(TargetUser.id);
         const BlacklistReason = options.getString('reason') || 'No reason provided.';
 
-        const CannotBlacklistEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | Cannot blacklist this user.`)
-        if (!TargetMember.manageable) return interaction.reply({ embeds: [CannotBlacklistEmbed] });
+        if (!TargetMember.manageable) return interaction.reply({ 
+            content: `${Error_Emoji} Unable to perform action.`
+         });
 
         const blacklist = await database.create({
             GuildID: guildId,
@@ -39,7 +40,8 @@ module.exports = {
         });
         blacklist.save();
 
-        const BlacklistedEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetUser.id}> has been blacklisted | \`${BlacklistReason}\``)
-        interaction.reply({ embeds: [BlacklistedEmbed] });
+        interaction.reply({ 
+            content: `${Success_Emoji} Blacklisted **${TargetUser.tag}**`
+         });
     },
 };

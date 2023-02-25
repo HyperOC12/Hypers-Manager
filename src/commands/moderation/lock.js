@@ -1,5 +1,5 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ChannelType } = require('discord.js');
-const { Error_Emoji } = require('../../config.json');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,10 +16,6 @@ module.exports = {
             .setDescription('Reason for locking the channel.')
             .setMaxLength(1000)
             .setMinLength(1)
-    )
-    .addStringOption(option => option
-            .setName('flags')
-            .setDescription('Lock flags.')
     ),
     /**
      * @param {ChatInputCommandInteraction} interaction
@@ -29,7 +25,6 @@ module.exports = {
 
         const LockChannel = options.getChannel('channel') || channel;
         const LockReason = options.getString('reason') || 'No reason provided.';
-        const LockFlags = options.getString('flags');
 
         const LockedEmbed = new EmbedBuilder()
         .setColor('Red')
@@ -38,14 +33,16 @@ module.exports = {
         .setFields({ name: 'Reason', value: `${LockReason}` })
         .setTimestamp()
 
-        if (LockFlags) {
-            return interaction.reply({ content: 'Flags are not released yet.', ephemeral: true });
-        };
-
-        if (LockChannel.permissionsFor(guildId).has('SendMessages') === false) return interaction.reply({ content: 'Channel is already locked.', ephemeral: true });
+        if (LockChannel.permissionsFor(guildId).has('SendMessages') === false) return interaction.reply({ 
+            content: `${Error_Emoji} Channel is already locked.`,
+            ephemeral: true
+         });
 
         LockChannel.permissionOverwrites.edit(guildId, { SendMessages: false }).then(() => {
-            interaction.reply({ content: 'Channel locked.', ephemeral: true });
+            interaction.reply({ 
+                content: `${Success_Emoji} Channel has been locked.`,
+                ephemeral: true
+            });
             LockChannel.send({ embeds: [LockedEmbed] });
         });
     },

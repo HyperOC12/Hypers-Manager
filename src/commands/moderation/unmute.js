@@ -1,5 +1,6 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-const { DirectMessage_Embed_Colour, Success_Emoji, Error_Emoji } = require('../../config.json');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
+const { createCaseId } = require('../../util/generateCaseId');
 const randomstring = require('randomstring');
 
 module.exports = {
@@ -29,17 +30,18 @@ module.exports = {
         const UnmuteReason = options.getString('reason') || 'No reason provided.';
 
         const LogChannel = guild.channels.cache.get('946156432057860103');
-        const CaseId = randomstring.generate({ length: 18, charset: 'numeric' });
+        const CaseId = createCaseId();
 
-        const CannotUnmuteEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | Unable to unmute this user.`)
-        if (!TargetMember.moderatable) return interaction.reply({ embeds: [CannotUnmuteEmbed] });
-
-        const NotMutedEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | This user is not muted.`)
-        if (TargetMember.isCommunicationDisabled() === false) return interaction.reply({ embeds: [NotMutedEmbed] });
+        if (!TargetMember.moderatable || TargetMember.isCommunicationDisabled === false) {
+            interaction.reply({
+                content: `${Error_Emoji} Unable to perform action.`
+            });
+        };
 
         await TargetMember.timeout(null).then(() => {
-            const UnmuteSuccessEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetUser.id}> has been unmuted | \`${CaseId}\``)
-            interaction.reply({ embeds: [UnmuteSuccessEmbed] });
+            interaction.reply({ 
+                content: `${Success_Emoji} Unmuted **${TargetUser.tag}** (Case #${CaseId})`
+             });
         });
 
         const LogEmbed = new EmbedBuilder()

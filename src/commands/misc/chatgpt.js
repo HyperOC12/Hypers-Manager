@@ -1,5 +1,6 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder } = require('discord.js');
 const { Configuration, OpenAIApi } = require('openai');
+const { Error_Emoji } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,6 +20,7 @@ module.exports = {
         const question = options.getString('question');
 
         await interaction.deferReply();
+        
         try {
             const configuration = new Configuration({
                 apiKey: process.env.OPENAI_API_KEY,
@@ -27,14 +29,14 @@ module.exports = {
             const openai = new OpenAIApi(configuration);
 
             const completion = await openai.createCompletion({
-                model: "text-davinci-002",
+                model: 'text-davinci-002',
                 prompt: question,
                 max_tokens: 1000
             })
 
             await interaction.editReply(completion.data.choices[0].text);
         } catch (error) {
-            await interaction.editReply("Oops! Something went wrong...")
+            await interaction.editReply(`${Error_Emoji} An error occured.`)
         }
     },
 };

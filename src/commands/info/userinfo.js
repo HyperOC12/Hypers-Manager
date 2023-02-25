@@ -19,7 +19,7 @@ module.exports = {
         const TargetUser = options.getUser('target') || user;
         const TargetMember = await guild.members.fetch(TargetUser.id);
 
-        const UserBanner = (await client.users.fetch(TargetUser, { force: true })).bannerURL({ size: 2048 });
+        const UserBanner = (await client.users.fetch(TargetUser, { force: true })).bannerURL({ size: 2048 }) || null;
         const UserRoles = TargetMember.roles.cache.sort((a, b) => b.position - a.position).map((r) => r).join(' ').replace('@everyone, " "');
         const RoleSize = TargetMember.roles.cache.size;
 

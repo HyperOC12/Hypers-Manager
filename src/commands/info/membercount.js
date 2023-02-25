@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { ChatInputCommandInteraction, SlashCommandBuilder } = require('discord.js');
 const { Default_Embed_Colour } = require('../../config.json');
 
 module.exports = {
@@ -11,11 +11,8 @@ module.exports = {
     async execute(interaction, client) {
         const { guild } = interaction;
 
-        const CountEmbed = new EmbedBuilder()
-        .setColor(Default_Embed_Colour)
-        .setAuthor({ name: `${guild.name}`, iconURL: `${guild.iconURL()}` })
-        .setDescription(`**${guild.memberCount}**`)
-
-        interaction.reply({ embeds: [CountEmbed] });
+        interaction.reply({
+            content: `Current members: **${guild.memberCount}}**`
+        })
     },
 };

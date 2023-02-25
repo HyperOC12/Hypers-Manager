@@ -1,4 +1,5 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, userMention, inlineCode, channelMention } = require('discord.js');
+const { ChatInputCommandInteraction, SlashCommandBuilder, PermissionFlagsBits, channelMention } = require('discord.js');
+const { Success_Emoji } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,34 +17,16 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     async execute(interaction, client) {
-        const { guild, channel, options, user } = interaction;
+        const { guild, channel, options } = interaction;
 
         const Message = options.getString('message');
-
         const LogChannel = guild.channels.cache.get('946156222292299807');
 
         channel.send({ content: `${Message}`, allowedMentions: { parse: ['users'] } }).then(() => {
-            interaction.reply({ content: 'Message sent.', ephemeral: true });
+            interaction.reply({
+                content: `${Success_Emoji} Message sent to ${channelMention(channel.id)}`
+            });
         });
-
-        const LogEmbed = new EmbedBuilder()
-        .setTitle('Say Command Used')
-        .setColor('DarkGrey')
-        .setFields(
-            {
-                name: '• User',
-                value: `${userMention(user.id)} | ${inlineCode(user.id)}`
-            },
-            {
-                name: '• Channel',
-                value: `${channelMention(channel.id)} | ${inlineCode(channel.id)}`
-            },  
-            {
-                name: '• Content',
-                value: Message
-            }
-        )
-        .setTimestamp()
 
         LogChannel.send({ embeds: [LogEmbed] });
     },

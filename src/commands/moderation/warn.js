@@ -1,7 +1,7 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-const { DirectMessage_Embed_Colour, Success_Emoji, Error_Emoji } = require('../../config.json');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
+const { createCaseId } = require('../../util/generateCaseId');
 const database = require('../../database/schemas/PunishmentSchema.js');
-const randomstring = require('randomstring');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -30,25 +30,23 @@ module.exports = {
 
         const WarnDate = new Date(createdTimestamp).toDateString();
         const LogChannel = guild.channels.cache.get('946156432057860103');
-        const CaseId = randomstring.generate({ length: 18, charset: 'numeric' });      
-        
-        const CannotWarnSelfEmbed = new EmbedBuilder().setColor('Red').setDescription(`${Error_Emoji} | You cannot warn yourself.`)
-        if (TargetUser.id === user.id) return interaction.reply({ embeds: [CannotWarnSelfEmbed] });
+        const CaseId = createCaseId();
 
-        const DirectEmbed = new EmbedBuilder()
-        .setColor(DirectMessage_Embed_Colour)
-        .setAuthor({ name: `${guild.name}`, iconURL: `${guild.iconURL()}` })
-        .setTitle(`You have been warned in ${guild.name}`)
-        .setFields(
-            {
-                name: 'Reason',
-                value: `> ${WarnReason}`
-            }
-        )
-        .setFooter({ text: `Punishment ID: ${CaseId}` })
-        .setTimestamp()
+        let DM_Status
 
-        await TargetUser.send({ embeds: [DirectEmbed] }).catch((console.error));
+        if (TargetUser.id === user.id) return interaction.reply({ 
+            content: `${Error_Emoji} Cannot warn yourself.`
+        });
+
+        try {
+            await TargetUser.send({ 
+                content: `You have been warned in **${guild.name}** for the reason ${KickReason}`
+            });
+
+            DM_Status = '(user notified)'
+         } catch (error) {
+            DM_Status = '(unable to message user)'
+         };
 
         database.findOne({ Type: 'Warn', CaseID: CaseId, GuildID: guildId, UserID: TargetUser.id, UserTag: TargetUser.tag }, async (err, res) => {
             if (err) throw err;
@@ -78,8 +76,9 @@ module.exports = {
             data.save();
         });
 
-        const WarnSuccessEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetUser.id}> has been warned | \`${CaseId}\``)
-        interaction.reply({ embeds: [WarnSuccessEmbed] });
+        interaction.reply({ 
+            content: `${Success_Emoji} Warned **${TargetUser.tag}** (Case #${CaseId}) (${DM_Status})`
+         });
 
         const LogEmbed = new EmbedBuilder()
         .setColor('Orange')

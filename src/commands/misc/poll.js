@@ -33,23 +33,14 @@ module.exports = {
     async execute(interaction, client) {
         const { options, user } = interaction;
 
-        const pollQuestion = options.getString('question');
+        const PollQuestion = options.getString('question');
         const option1 = options.getString('option1');
         const option2 = options.getString('option2');
 
         const PollEmbed = new EmbedBuilder()
         .setColor(Default_Embed_Colour)
-        .setTitle(`${pollQuestion}`)
-        .setFields(
-            {
-                name: 'Option 1',
-                value: `> ${option1}`
-            },
-            {
-                name: 'Option 2',
-                value: `> ${option2}`
-            }
-        )
+        .setTitle(`${PollQuestion}`)
+        .setDescription(`${option1} **or** ${option2}`)
         .setFooter({ text: `Poll by: ${user.username}` })
         .setTimestamp()
 

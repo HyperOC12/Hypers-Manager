@@ -1,6 +1,6 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const { Success_Emoji, Error_Emoji } = require('../../config.json');
-const randomstring = require('randomstring');
+const { createCaseId } = require('../../util/generateCaseId');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,12 +11,12 @@ module.exports = {
             .setName('target')
             .setDescription('User to unban (ID).')
             .setRequired(true)
-            .setMaxLength(1000)
-            .setMinLength(1)
     )
     .addStringOption(option => option
             .setName('reason')
             .setDescription('The unban reason.')
+            .setMaxLength(1000)
+            .setMinLength(1)
     ),
     /**
      * @param {ChatInputCommandInteraction} interaction
@@ -28,28 +28,26 @@ module.exports = {
         const UnbanReason = options.getString('reason') || 'No reason provided.';
 
         const LogChannel = guild.channels.cache.get('946156432057860103');
-        const CaseId = randomstring.generate({ length: 18, charset: 'numeric' });
+        const CaseId = createCaseId();
+        const Bans = await guild.bans.fetch();
 
-        await guild.bans.fetch().then(async (bans) => {
-            if (bans.size === 0) return interaction.reply({ content: 'No bans.', ephemeral: true });
-            const InvalidIDEmbed = new EmbedBuilder('Red').setDescription(`${Error_Emoji} | No ban found with ID \`${TargetID}\``)
-
-            let bannedId = bans.find((ban) => ban.user.id === TargetID);
-            if (!bannedId) return interaction.reply({ embeds: [InvalidIDEmbed] });
-
-            await guild.bans.remove(TargetID, UnbanReason).then(() => {
-                const UnbannedEmbed = new EmbedBuilder().setColor('Green').setDescription(`${Success_Emoji} | <@${TargetID.id}> has been unbanned | \`${CaseId}\``)
-                interaction.reply({ embeds: [UnbannedEmbed] });
-                
-                const LogEmbed = new EmbedBuilder()
-                .setColor('Green')
-                .setAuthor({ name: `${user.tag}`, iconURL: `${user.displayAvatarURL()}` })
-                .setDescription(`**Member**: <@${TargetID}> | \`${TargetID}\`\n**Type**: Unban\n**Reason**: ${UnbanReason}`)
-                .setFooter({ text: `Punishment ID: ${CaseId}` })
-                .setTimestamp()
-        
-                LogChannel.send({ embeds: [LogEmbed] });
-            });
+        if (!Bans.find(TargetID)) return interaction.reply({
+            content: `${Error_Emoji} Could not find a ban for this user.`
         });
+
+        await guild.bans.remove(TargetID, UnbanReason).then(() => {
+            interaction.reply({
+                content: `${Success_Emoji} Unbanned user sucessfully. (Case #${CaseId})`
+            })
+        });
+
+        const LogEmbed = new EmbedBuilder()
+        .setColor('Green')
+        .setAuthor({ name: `${user.tag}`, iconURL: `${user.displayAvatarURL()}` })
+        .setDescription(`**Member**: <@${TargetID}> | \`${TargetID}\`\n**Type**: Unban\n**Reason**: ${UnbanReason}`)
+        .setFooter({ text: `Punishment ID: ${CaseId}` })
+        .setTimestamp()
+
+        LogChannel.send({ embeds: [LogEmbed] });
     },
 };

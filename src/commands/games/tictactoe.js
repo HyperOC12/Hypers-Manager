@@ -1,14 +1,14 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder } = require('discord.js');
-const { Game } = require('./builder')
+const { Game } = require('./builder');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('tictactoe')
         .setDescription('Starts a new tictactoe game.')
         .addUserOption(option => option
-            .setName('user')
-            .setDescription('The user to play with.')
-            .setRequired(true)
+                .setName('user')
+                .setDescription('The user to play with.')
+                .setRequired(true)
     ),
     /**
      * @param {ChatInputCommandInteraction} interaction

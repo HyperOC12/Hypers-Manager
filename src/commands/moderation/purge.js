@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const { ChatInputCommandInteraction, SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { Success_Emoji } = require("../../config.json");
 
 module.exports = {
@@ -24,12 +24,9 @@ module.exports = {
         const { channel, options } = interaction;
 
         const Amount = options.getNumber('amount');
-        const Target = options.getMember('target');
+        const Target = options.getUser('target');
 
         const Messages = await channel.messages.fetch();
-
-        const Response = new EmbedBuilder()
-        .setColor('Green');
 
         if(Target){
             let i = 0;
@@ -38,18 +35,21 @@ module.exports = {
                 if(m.author.id === Target.id && Amount > i){
                     filtered.push(m);
                     i++;
-                }
-            })
+                };
+            });
+
             await channel.bulkDelete(filtered, true).then(messages => {
-                Response.setDescription(`${Success_Emoji} Purged ${messages.size} ${messages.size > 1 ? "messages" : "message"} sent by ${Target}.`);
-                interaction.reply({ embeds: [Response] });
+                interaction.reply({ 
+                    content: `${Success_Emoji} Purged ${messages.size} ${messages.size > 1 ? 'messages' : 'message'} sent by **${Target.tag}**`
+                 });
             });
         }
-        else{
-            await channel.bulkDelete(Amount, true).then(messages => { 
-                Response.setDescription(`${Success_Emoji} Purged ${messages.size} ${messages.size > 1 ? "messages" : "message"}.`);
-                interaction.reply({ embeds:[Response] });
-            })
-        }
+        else {
+            await channel.bulkDelete(Amount, true).then(messages => {
+                interaction.reply({ 
+                    content: `${Success_Emoji} Purged ${messages.size} ${messages.size > 1 ? 'messages' : 'message'}.`
+                 });
+            });
+        };
     },
 };

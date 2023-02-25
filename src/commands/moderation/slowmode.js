@@ -1,4 +1,5 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, PermissionFlagsBits, channelMention } = require('discord.js');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -39,12 +40,19 @@ module.exports = {
                 default:
                     error = true;
             }
-        }); 
+        });
+
         if(!error) {
             channel.setRateLimitPerUser(Total);
-            await interaction.reply( `Slowmode has been set to \`${SlowmodeDuration}\``);
+            await interaction.reply(`${Success_Emoji} Slowmode set to **${SlowmodeDuration}**`);
         } else {
-            await interaction.reply(`Error: Cannot set the rate limit to \`${SlowmodeDuration}\``)
+            await interaction.reply(`${Error_Emoji} Unable to set slowmode.`);
+        }
+
+        if (!SlowmodeDuration) {
+            interaction.reply({
+                content: `Current slowmode for ${channelMention(channel.id)} is ${channel.rateLimitPerUser}`
+            })
         }
     },
 };

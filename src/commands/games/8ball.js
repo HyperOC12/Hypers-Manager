@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { ChatInputCommandInteraction, SlashCommandBuilder } = require('discord.js');
 const { Default_Embed_Colour } = require('../../config.json');
 
 module.exports = {
@@ -6,9 +6,9 @@ module.exports = {
         .setName('8ball')
         .setDescription('Ask the magic 8ball a question.')
         .addStringOption(option => option
-            .setName('question')
-            .setDescription('The question you would like to ask the 8ball.')
-            .setRequired(true)
+                .setName('question')
+                .setDescription('The question you would like to ask the 8ball.')
+                .setRequired(true)
     ),
     /**
      * @param {ChatInputCommandInteraction} interaction
@@ -50,12 +50,9 @@ module.exports = {
             'Good Luck',
         ];
         let index = (Math.floor(Math.random() * Math.floor(answers.length)));
-        
-        const embed = new EmbedBuilder()
-        .setTitle("The Magic 8ball")
-        .setColor(Default_Embed_Colour)
-        .setDescription(`**Your Question:**\n${question}\n\n**My Answer:**\n${answers[index]}`)
 
-        interaction.reply({ embeds: [embed] });
+        interaction.reply({ 
+            content: `${answers[index]}`
+         });
     },
 };
