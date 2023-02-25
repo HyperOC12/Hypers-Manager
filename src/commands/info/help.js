@@ -28,7 +28,7 @@ module.exports = {
             },
             {
                 name: '• Misc',
-                value: codeBlock('avatar, chatgpt, poll, say')
+                value: codeBlock('avatar, chatgpt, poll, reminder, say')
             },
             {
                 name: '• Games',
