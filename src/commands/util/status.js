@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, Client, PermissionFlagsBits } = require('discord.js');
+const { ChatInputCommandInteraction, SlashCommandBuilder, Client, PermissionFlagsBits, ActivityType } = require('discord.js');
 const { Success_Emoji } = require('../../config.json');
 
 module.exports = {
@@ -12,6 +12,16 @@ module.exports = {
             .setRequired(true)
             .setMaxLength(32)
             .setMinLength(1)
+    )
+    .addStringOption(option => option
+            .setName('type')
+            .setDescription('Activity type.')
+            .setRequired(true)
+            .addChoices(
+                { name: 'Watching', value: 'watching' },
+                { name: 'Listening', value: 'listening' },
+                { name: 'Playing', value: 'playing' }
+            )
     ),
     /**
      * @param {ChatInputCommandInteraction} interaction
@@ -21,8 +31,24 @@ module.exports = {
         const { options } = interaction;
         
         const StatusText = options.getString('text');
-        client.user.setActivity({ name: `${StatusText}` });
-        
+        const StatusType = options.getString('type');
+
+        let ChosenType = '';
+
+        switch (StatusType) {
+            case 'watching':
+                ChosenType = ActivityType.Watching
+                break;
+            case 'listening':
+                ChosenType = ActivityType.Listening
+                break;
+            case 'playing':
+                ChosenType = ActivityType.Playing
+                break;
+        };
+
+        client.user.setActivity({ name: `${StatusText}`, type: ChosenType });
+
         interaction.reply({ 
             content: `${Success_Emoji} Status changed to **${StatusText}** with type **${ChosenType}**`
         });
