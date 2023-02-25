@@ -36,7 +36,7 @@ module.exports = {
 
             await interaction.editReply(completion.data.choices[0].text);
         } catch (error) {
-            await interaction.editReply(`${Error_Emoji} An error occured.`)
+            await interaction.editReply("Oops! Something went wrong...")
         }
     },
 };
