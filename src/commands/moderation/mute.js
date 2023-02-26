@@ -57,7 +57,7 @@ module.exports = {
 
         await TargetMember.timeout(ms(MuteDuration)).then(() => {
             interaction.reply({ 
-                content: `${Success_Emoji} Muted **${TargetUser.tag}** for **${MuteDuration}** (Case #${CaseId})`
+                content: `${Success_Emoji} Muted **${TargetUser.tag}** for **${MuteExpiry}** (Case #${CaseId})`
              });
         });
 
