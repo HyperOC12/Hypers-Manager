@@ -44,7 +44,7 @@ module.exports = {
 
         if(!error) {
             channel.setRateLimitPerUser(Total);
-            await interaction.reply(`${Success_Emoji} Slowmode set to **${SlowmodeDuration}**`);
+            await interaction.reply(`${Success_Emoji} Slowmode set to **${ms(ms(SlowmodeDuration), { long: true })}**`);
         } else {
             await interaction.reply(`${Error_Emoji} Unable to set slowmode.`);
         }
