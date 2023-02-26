@@ -1,4 +1,4 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, time } = require('discord.js');
+const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const { Success_Emoji, Error_Emoji } = require('../../config.json');
 const { createCaseId } = require('../../util/generateCaseId');
 const ms = require('ms');
@@ -37,7 +37,7 @@ module.exports = {
 
         const LogChannel = guild.channels.cache.get('946156432057860103');
         const CaseId = createCaseId();
-        const MuteExpiry = time(TargetMember.communicationDisabledUntilTimestamp);
+        const MuteExpiry = ms(ms(MuteDuration), { long: true });
         
         if (!TargetMember.moderatable) {
             return interaction.reply({
@@ -52,12 +52,12 @@ module.exports = {
         };
         
         await TargetUser.send({ 
-            content: `You have been muted in **${guild.name}** for the reason: ${MuteReason} (${MuteDuration}). If you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
-        }).catch(console.error)
+            content: `You have been muted in **${guild.name}** for the reason: ${MuteReason}\nExpiry: **${MuteExpiry}**\nIf you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
+        }).catch(console.error);
 
         await TargetMember.timeout(ms(MuteDuration)).then(() => {
             interaction.reply({ 
-                content: `${Success_Emoji} Muted **${TargetUser.tag}** for **${MuteDuration}** (Case #${CaseId})`
+                content: `${Success_Emoji} Muted **${TargetUser.tag}** for **${MuteExpiry}** (Case #${CaseId})`
              });
         });
 
