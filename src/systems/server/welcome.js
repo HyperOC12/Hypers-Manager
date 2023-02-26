@@ -1,4 +1,4 @@
-const { Events } = require('discord.js');
+const { Events, userMention, roleMention } = require('discord.js');
 
 module.exports = (client) => {
     client.on(Events.GuildMemberAdd, (member) => {
