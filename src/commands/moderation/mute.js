@@ -52,7 +52,7 @@ module.exports = {
         };
         
         await TargetUser.send({ 
-            content: `You have been muted in **${guild.name}** for the reason: ${MuteReason}\nExpiry: ${MuteExpiry} If you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
+            content: `You have been muted in **${guild.name}** for the reason: ${MuteReason}\Duration: ${MuteDuration} If you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
         }).catch(console.error);
 
         await TargetMember.timeout(ms(MuteDuration)).then(() => {
