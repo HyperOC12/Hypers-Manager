@@ -41,8 +41,6 @@ module.exports = {
         .setColor(Default_Embed_Colour)
         .setTitle(`${PollQuestion}`)
         .setDescription(`${option1} **or** ${option2}`)
-        .setFooter({ text: `Poll by: ${user.username}` })
-        .setTimestamp()
 
         const message = await interaction.reply({ embeds: [PollEmbed], fetchReply: true });
         message.react(`${Success_Emoji}`);
