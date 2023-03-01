@@ -2,6 +2,7 @@ const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, Permissi
 const { Success_Emoji, Error_Emoji } = require('../../config.json');
 const { createCaseId } = require('../../util/generateCaseId');
 const ms = require('ms');
+const database = require('../../database/schemas/PunishmentSchema.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -28,13 +29,14 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     async execute(interaction, client) {
-        const { guild, options, user } = interaction;
+        const { guild, guildId, options, user, createdTimestamp } = interaction;
 
         const TargetUser = options.getUser('target') || user;
         const TargetMember = await guild.members.fetch(TargetUser.id);
         const MuteDuration = options.getString('duration');
         const MuteReason = options.getString('reason') || 'No reason provided.';
 
+        const MuteDate = new Date(createdTimestamp).toDateString();
         const LogChannel = guild.channels.cache.get('946156432057860103');
         const CaseId = createCaseId();
         const MuteExpiry = ms(ms(MuteDuration), { long: true });
@@ -55,10 +57,28 @@ module.exports = {
             content: `You have been muted in **${guild.name}** for the reason: ${MuteReason}\nExpiry: **${MuteExpiry}**\nIf you wish to appeal follow this link: <https://dyno.gg/form/b72ba489>`
         }).catch(console.error);
 
-        await TargetMember.timeout(ms(MuteDuration)).then(() => {
+        await TargetMember.timeout(ms(MuteDuration)).then(async () => {
             interaction.reply({ 
                 content: `${Success_Emoji} Muted **${TargetUser.tag}** for **${MuteExpiry}** (Case #${CaseId})`
              });
+
+             const mute = await database.create({
+                Type: 'Ban',
+                CaseID: CaseId,
+                GuildID: guildId,
+                UserID: TargetUser.id,
+                UserTag: TargetUser.tag,
+                Content: [
+                    {
+                        Moderator: user.tag,
+                        MuteDate: MuteDate,
+                        Reason: MuteReason,
+                        Duration: MuteDuration
+                    }
+                ],
+             });
+
+             mute.save();
         });
 
         const LogEmbed = new EmbedBuilder()
