@@ -23,7 +23,7 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     async execute(interaction, client) {
-        const { guild, options, user } = interaction;
+        const { guild, options, user, createdTimestamp } = interaction;
 
         const TargetUser = options.getUser('target');
         const TargetMember = await guild.members.fetch(TargetUser.id);
