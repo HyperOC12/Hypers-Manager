@@ -59,7 +59,7 @@ module.exports = {
                 Content: [
                     {
                         Moderator: user.tag,
-                        UnmuteDate: UnmuteDate,
+                        PunishmentDate: UnmuteDate,
                         Reason: UnmuteReason
                     }
                 ],

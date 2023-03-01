@@ -52,7 +52,7 @@ module.exports = {
                     Content: [
                         {
                             Moderator: user.tag,
-                            WarnDate: WarnDate,
+                            PunishmentDate: WarnDate,
                             Reason: WarnReason   
                         }
                     ],
@@ -60,7 +60,7 @@ module.exports = {
             } else {
                 const obj = {
                     Moderator: user.tag,
-                    WarnDate: WarnDate,
+                    PunishmentDate: WarnDate,
                     Reason: WarnReason
                 };
                 data.Content.push(obj);

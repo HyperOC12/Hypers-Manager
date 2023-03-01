@@ -55,7 +55,7 @@ module.exports = {
                 Content: [
                     {
                         Moderator: user.tag,
-                        KickDate: KickDate,
+                        PunishmentDate: KickDate,
                         Reason: KickReason
                     }
                 ],
