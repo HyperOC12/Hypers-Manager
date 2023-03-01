@@ -1,7 +1,7 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const { Success_Emoji, Error_Emoji } = require('../../config.json');
 const { createCaseId } = require('../../util/generateCaseId');
-const randomstring = require('randomstring');
+const database = require('../../database/schemas/PunishmentSchema.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -29,6 +29,7 @@ module.exports = {
         const TargetMember = await guild.members.fetch(TargetUser.id);
         const UnmuteReason = options.getString('reason') || 'No reason provided.';
 
+        const UnmuteDate = new Date(createdTimestamp).toDateString();
         const LogChannel = guild.channels.cache.get('946156432057860103');
         const CaseId = createCaseId();
         
@@ -44,10 +45,27 @@ module.exports = {
             });
         };
 
-        await TargetMember.timeout(null).then(() => {
+        await TargetMember.timeout(null).then(async () => {
             interaction.reply({ 
                 content: `${Success_Emoji} Unmuted **${TargetUser.tag}** (Case #${CaseId})`
              });
+
+             const unmute = await database.create({
+                Type: 'Unmute',
+                CaseID: CaseId,
+                GuildID: guildId,
+                UserID: TargetUser.id,
+                UserTag: TargetUser.tag,
+                Content: [
+                    {
+                        Moderator: user.tag,
+                        UnmuteDate: UnmuteDate,
+                        Reason: UnmuteReason
+                    }
+                ],
+             });
+
+             unmute.save();
         });
 
         const LogEmbed = new EmbedBuilder()

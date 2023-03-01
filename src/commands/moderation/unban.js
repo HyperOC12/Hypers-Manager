@@ -43,7 +43,7 @@ module.exports = {
             })
 
             const unban = await database.create({
-                Type: 'Ban',
+                Type: 'Unban',
                 CaseID: CaseId,
                 GuildID: guildId,
                 UserID: TargetUser.id,

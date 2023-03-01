@@ -63,7 +63,7 @@ module.exports = {
              });
 
              const mute = await database.create({
-                Type: 'Ban',
+                Type: 'Mute',
                 CaseID: CaseId,
                 GuildID: guildId,
                 UserID: TargetUser.id,
