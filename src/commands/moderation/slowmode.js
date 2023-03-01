@@ -1,5 +1,6 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, PermissionFlagsBits, channelMention } = require('discord.js');
 const { Success_Emoji, Error_Emoji } = require('../../config.json');
+const ms = require('ms');
 
 module.exports = {
     data: new SlashCommandBuilder()
