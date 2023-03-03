@@ -13,7 +13,7 @@ module.exports = {
 
         const ServerOwner = (await guild.fetchOwner()).user.tag
         const ServerBanner = guild.bannerURL({ size: 2048 }) || null;
-        const ServerFeatures = guild.features.join('\n') || "None";
+        const ServerFeatures = guild.features.join('\n') || 'None';
 
         const InfoEmbed = new EmbedBuilder()
         .setColor(Default_Embed_Colour)
