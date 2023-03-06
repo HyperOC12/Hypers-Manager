@@ -31,7 +31,7 @@ module.exports = {
     async execute(interaction, client) {
         const { guild, guildId, options, user, createdTimestamp } = interaction;
 
-        const TargetUser = options.getUser('target') || user;
+        const TargetUser = options.getUser('target');
         const TargetMember = await guild.members.fetch(TargetUser.id);
         const MuteDuration = options.getString('duration');
         const MuteReason = options.getString('reason') || 'No reason provided.';
