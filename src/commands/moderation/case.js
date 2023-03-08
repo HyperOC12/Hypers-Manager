@@ -1,5 +1,5 @@
-const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
-const { Error_Emoji } = require('../../config.json');
+const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, PermissionFlagsBits, ComponentType, userMention, inlineCode } = require('discord.js');
+const { Success_Emoji, Error_Emoji } = require('../../config.json');
 const database = require('../../database/schemas/PunishmentSchema.js');
 
 module.exports = {
@@ -16,13 +16,25 @@ module.exports = {
      * @param {ChatInputCommandInteraction} interaction
      */
     async execute(interaction, client) {
-        const { guildId, options } = interaction;
+        const { guildId, options, channel } = interaction;
 
         const PunishmentID = options.getString('id');
         const data = await database.findOne({ GuildID: guildId, CaseID: PunishmentID });
+
         if (!data) return interaction.reply({
             content: `${Error_Emoji} No punishment found.`
         });
+
+        const CaseOptions = new ActionRowBuilder().addComponents(
+            new StringSelectMenuBuilder()
+            .setCustomId('case-options-menu')
+            .setPlaceholder('Case Options')
+            .setMaxValues(1)
+            .setMinValues(1)
+            .addOptions(
+                { label: 'Delete', description: 'Delete this case.', emoji: '🛑', value: 'delete' }
+            )
+        )
         
         const CaseEmbed = new EmbedBuilder()
         .setColor('Orange')
@@ -67,8 +79,34 @@ module.exports = {
             
         };
 
+        const collector = channel.createMessageComponentCollector({ componentType: ComponentType.StringSelect });
+
+        collector.on('collect', (i) => {
+            if (!i.customId === 'case-options-menu' || !i.member.permissions.has('ModerateMembers')) return;
+
+            let chosenOption = ''
+            i.values.forEach((value) => { chosenOption = value });
+
+            switch (chosenOption) {
+                case 'delete':
+                    data.remove();
+                    i.reply({
+                        content: `${Success_Emoji} Case ${inlineCode(PunishmentID)} has been deleted successfully.`,
+                        ephemeral: true
+                    });
+
+                    interaction.editReply({
+                        content: `This case was deleted by ${userMention(i.user.id)}`,
+                        embeds: [],
+                        components: []
+                    });
+                    break;
+            }
+        });
+
         interaction.reply({
-            embeds: [CaseEmbed]
+            embeds: [CaseEmbed],
+            components: [CaseOptions]
         });
     },
 };
