@@ -1,8 +1,8 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const { Success_Emoji, Error_Emoji } = require('../../config.json');
 const { createCaseId } = require('../../util/generateCaseId');
-const ms = require('ms');
 const database = require('../../database/schemas/PunishmentSchema.js');
+const ms = require('ms');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -31,7 +31,7 @@ module.exports = {
     async execute(interaction, client) {
         const { guild, guildId, options, user, createdTimestamp } = interaction;
 
-        const TargetUser = options.getUser('target') || user;
+        const TargetUser = options.getUser('target');
         const TargetMember = await guild.members.fetch(TargetUser.id);
         const MuteDuration = options.getString('duration');
         const MuteReason = options.getString('reason') || 'No reason provided.';

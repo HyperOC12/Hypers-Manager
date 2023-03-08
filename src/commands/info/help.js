@@ -44,6 +44,8 @@ module.exports = {
             }
         )
 
-        interaction.reply({ embeds: [HelpEmbed] });
+        interaction.reply({ 
+            embeds: [HelpEmbed] 
+        });
     },
 };

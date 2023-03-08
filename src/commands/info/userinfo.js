@@ -63,6 +63,8 @@ module.exports = {
             },
         )
 
-        interaction.reply({ embeds: [InfoEmbed] });
+        interaction.reply({ 
+            embeds: [InfoEmbed] 
+        });
     },
 };
