@@ -36,7 +36,7 @@ module.exports = {
             },
             {
                 name: '• Util',
-                value: codeBlock('customrole, ping, status, blacklist')
+                value: codeBlock('customrole, ping, blacklist')
             },
             {
                 name: '• Developer',
