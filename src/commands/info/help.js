@@ -40,7 +40,7 @@ module.exports = {
             },
             {
                 name: '• Developer',
-                value: codeBlock('debug, status')
+                value: codeBlock('emit, debug, status')
             }
         )
 
