@@ -1,6 +1,5 @@
 const { ChatInputCommandInteraction, SlashCommandBuilder, Client, EmbedBuilder, codeBlock } = require('discord.js');
 const { Default_Embed_Colour } = require('../../config.json');
-const { addBadges } = require('../../util/addBadges');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -20,7 +19,6 @@ module.exports = {
         const TargetUser = options.getUser('target') || user;
         const TargetMember = await guild.members.fetch(TargetUser.id);
 
-        const UserBadges = await TargetUser.flags.toArray();
         const UserBanner = (await client.users.fetch(TargetUser, { force: true })).bannerURL({ size: 2048 }) || null;
         const UserRoles = TargetMember.roles.cache.sort((a, b) => b.position - a.position).map((r) => r).join(' ').replace('@everyone, " "');
         const RoleSize = TargetMember.roles.cache.size;
