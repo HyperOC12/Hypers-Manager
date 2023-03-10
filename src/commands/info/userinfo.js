@@ -20,7 +20,7 @@ module.exports = {
         const TargetUser = options.getUser('target') || user;
         const TargetMember = await guild.members.fetch(TargetUser.id);
 
-        const UserBadges = user.flags.toArray();
+        const UserBadges = await TargetUser.flags.toArray();
         const UserBanner = (await client.users.fetch(TargetUser, { force: true })).bannerURL({ size: 2048 }) || null;
         const UserRoles = TargetMember.roles.cache.sort((a, b) => b.position - a.position).map((r) => r).join(' ').replace('@everyone, " "');
         const RoleSize = TargetMember.roles.cache.size;
@@ -30,7 +30,7 @@ module.exports = {
         .setAuthor({ name: `${guild.name}`, iconURL: `${guild.iconURL()}` })
         .setThumbnail(`${TargetUser.displayAvatarURL()}`)
         .setImage(UserBanner)
-        .setDescription(`${addBadges(UserBadges)}`)
+        .setDescription(`${addBadges(UserBadges).join('')}`)
         .setFields(
             {
                 name: '• Username',
