@@ -1,4 +1,4 @@
-const { CommandInteraction, Client, InteractionType } = require('discord.js');
+const { CommandInteraction, Client, EmbedBuilder, InteractionType, codeBlock } = require('discord.js');
 const blacklistDB = require('../../database/schemas/BlacklistSchema.js');
 
 module.exports = {
@@ -24,11 +24,15 @@ module.exports = {
             try {
                 await command.execute(interaction, client);
             } catch (error) {
-                interaction.reply({ 
-                    content: 'An error occured whilst trying to run this command.', 
-                    ephemeral: true 
+                const ErrorEmbed = new EmbedBuilder()
+                .setColor('Red')
+                .setTitle('Error')
+                .setDescription(`${codeBlock(error)}`)
+
+                return interaction.reply({
+                    embeds: [ErrorEmbed],
+                    ephemeral: true
                 });
-                console.log(error);
             };
         };
     },
