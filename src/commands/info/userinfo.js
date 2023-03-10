@@ -27,7 +27,7 @@ module.exports = {
 
         const InfoEmbed = new EmbedBuilder()
         .setColor(Default_Embed_Colour)
-        .setAuthor({ name: `${guild.name}`, iconURL: `${guild.iconURL()}` })
+        .setAuthor({ name: `${TargetUser.tag}`, iconURL: `${TargetUser.displayAvatarURL()}` })
         .setThumbnail(`${TargetUser.displayAvatarURL()}`)
         .setImage(UserBanner)
         .setDescription(`${addBadges(UserBadges).join('')}`)
