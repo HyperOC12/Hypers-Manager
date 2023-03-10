@@ -28,7 +28,6 @@ module.exports = {
         .setAuthor({ name: `${TargetUser.tag}`, iconURL: `${TargetUser.displayAvatarURL()}` })
         .setThumbnail(`${TargetUser.displayAvatarURL()}`)
         .setImage(UserBanner)
-        .setDescription(`${addBadges(UserBadges).join('')}`)
         .setFields(
             {
                 name: '• Username',
