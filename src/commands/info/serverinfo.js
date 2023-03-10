@@ -11,7 +11,7 @@ module.exports = {
     async execute(interaction, client) {
         const { guild, guildId } = interaction;
 
-        const ServerOwner = (await guild.fetchOwner()).user.tag
+        const ServerOwner = (await guild.fetchOwner()).user.tag;
         const ServerBanner = guild.bannerURL({ size: 2048 }) || null;
         const ServerFeatures = guild.features.join('\n') || 'None';
 
