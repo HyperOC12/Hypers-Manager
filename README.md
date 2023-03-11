@@ -1,7 +1,3 @@
-# Jay's Assistant
+# Jay's Assistant has been discontinued and will no longer be a thing.
 
-> A private moderation and utility bot for JayCord, made with love by contributors and [@ Not-Jayy](https://github.com/Not-Jayy)
-
-## Contributing
-
-Please refer to the [contribution guide](/.github/CONTRIBUTING.md) to learn more.
+> However this repo will stay incase you want to use it still.
